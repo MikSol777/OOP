@@ -49,7 +49,16 @@ class TestCategoryProperties(unittest.TestCase):
     def test_get_product_property(self):
         first_product = self.category.products[0]
 
-        # Ожидаемый вывод
         expected_output = f"Смартфоны, {first_product.price} руб. Остаток: {first_product.quantity} шт."
 
         self.assertEqual(self.category.get_product, expected_output)
+
+class TestCategory(unittest.TestCase):
+
+    def setUp(self):
+        self.product1 = Product("Товар 1", "Описание товара 1", 100, 10)
+        self.product2 = Product("Товар 2", "Описание товара 2", 200, 5)
+        self.category = Category("Категория 1", "Описание категории", [self.product1, self.product2])
+
+    def test_str(self):
+        self.assertEqual(str(self.category), "Категория 1, количество продуктов: 15 шт.")

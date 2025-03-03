@@ -41,9 +41,23 @@ class TestProductProperties(unittest.TestCase):
     def test_price_setter_decrease_with_decline(self, mock_input):
         current_price = self.product.price
         self.product.price = 170000.0
-        self.assertEqual(self.product.price, current_price)  # Цена не должна измениться
+        self.assertEqual(self.product.price, current_price)
 
     @patch("builtins.input", return_value="y")
     def test_price_setter_decrease_with_confirmation(self, mock_input):
         self.product.price = 170000.0
-        self.assertEqual(self.product.price, 170000.0)  # Цена должна измениться
+        self.assertEqual(self.product.price, 170000.0)
+
+
+class TestProduct(unittest.TestCase):
+
+    def setUp(self):
+        self.product1 = Product("Товар 1", "Описание товара 1", 100, 10)
+        self.product2 = Product("Товар 2", "Описание товара 2", 200, 2)
+
+    def test_str(self):
+        self.assertEqual(str(self.product1), "Товар 1, 100 руб. Остаток: 10 шт.")
+        self.assertEqual(str(self.product2), "Товар 2, 200 руб. Остаток: 2 шт.")
+
+    def test_add(self):
+        self.assertEqual(self.product1 + self.product2, 1400)
