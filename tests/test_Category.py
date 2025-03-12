@@ -62,3 +62,4 @@ class TestCategory(unittest.TestCase):
 
     def test_str(self):
         self.assertEqual(str(self.category), "Категория 1, количество продуктов: 15 шт.")
+

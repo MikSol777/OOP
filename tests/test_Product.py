@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from src.Product import Product
+from src.Product import Product, Smartphone, LawnGrass
 
 
 def test_product_initialization():
@@ -61,3 +61,113 @@ class TestProduct(unittest.TestCase):
 
     def test_add(self):
         self.assertEqual(self.product1 + self.product2, 1400)
+
+
+class TestProductInheritance(unittest.TestCase):
+    def setUp(self):
+        self.smartphone = Smartphone(
+            name="iPhone 15",
+            description="512GB, Gray space",
+            price=210000.0,
+            quantity=8,
+            efficiency=98.2,
+            model="15",
+            memory=512,
+            color="Gray space"
+        )
+        self.lawn_grass = LawnGrass(
+            name="Газонная трава",
+            description="Элитная трава для газона",
+            price=500.0,
+            quantity=20,
+            country="Россия",
+            germination_period="7 дней",
+            color="Зеленый"
+        )
+        self.base_product = Product(
+            name="Test Product",
+            description="Test Description",
+            price=100.0,
+            quantity=10
+        )
+
+    def test_smartphone_initialization(self):
+        # Проверка базовых атрибутов
+        self.assertEqual(self.smartphone.name, "iPhone 15")
+        self.assertEqual(self.smartphone.description, "512GB, Gray space")
+        self.assertEqual(self.smartphone.price, 210000.0)
+        self.assertEqual(self.smartphone.quantity, 8)
+
+        # Проверка специфичных атрибутов
+        self.assertEqual(self.smartphone.efficiency, 98.2)
+        self.assertEqual(self.smartphone.model, "15")
+        self.assertEqual(self.smartphone.memory, 512)
+        self.assertEqual(self.smartphone.color, "Gray space")
+
+        # Проверка наследования
+        self.assertIsInstance(self.smartphone, Product)
+
+    def test_lawn_grass_initialization(self):
+        # Проверка базовых атрибутов
+        self.assertEqual(self.lawn_grass.name, "Газонная трава")
+        self.assertEqual(self.lawn_grass.description, "Элитная трава для газона")
+        self.assertEqual(self.lawn_grass.price, 500.0)
+        self.assertEqual(self.lawn_grass.quantity, 20)
+
+        # Проверка специфичных атрибутов
+        self.assertEqual(self.lawn_grass.country, "Россия")
+        self.assertEqual(self.lawn_grass.germination_period, "7 дней")
+        self.assertEqual(self.lawn_grass.color, "Зеленый")
+
+        # Проверка наследования
+        self.assertIsInstance(self.lawn_grass, Product)
+
+    def test_product_addition(self):
+        smartphone2 = Smartphone(
+            name="Samsung Galaxy S23",
+            description="256GB, Blue",
+            price=180000.0,
+            quantity=5,
+            efficiency=95.5,
+            model="S23",
+            memory=256,
+            color="Blue"
+        )
+        lawn_grass2 = LawnGrass(
+            name="Газонная трава 2",
+            description="Выносливая трава",
+            price=450.0,
+            quantity=15,
+            country="США",
+            germination_period="5 дней",
+            color="Темно-зеленый"
+        )
+
+        # Тест сложения одинаковых типов
+        self.assertEqual(self.smartphone + smartphone2, 210000.0 * 8 + 180000.0 * 5)
+        self.assertEqual(self.lawn_grass + lawn_grass2, 500.0 * 20 + 450.0 * 15)
+
+        # Тест сложения разных типов
+        with self.assertRaises(TypeError):
+            self.smartphone + self.lawn_grass
+
+        # Тест сложения с не-Product объектом
+        with self.assertRaises(ValueError):
+            self.smartphone + "not a product"
+
+        # Тест сложения с None
+        with self.assertRaises(ValueError):
+            self.smartphone + None
+
+        # Тест сложения с нулевым количеством
+        smartphone_zero = Smartphone(
+            name="Test",
+            description="Test",
+            price=100.0,
+            quantity=0,
+            efficiency=95.0,
+            model="Test",
+            memory=128,
+            color="Black"
+        )
+        self.assertEqual(self.smartphone + smartphone_zero, 210000.0 * 8 + 100.0 * 0)

@@ -12,7 +12,9 @@ class Category:
 
     def add_product(self, product):
         if not isinstance(product, Product):
-            raise ValueError("Можно добавлять только объекты, являющиеся продуктами или их наследниками.")
+            raise TypeError("Можно добавлять только объекты класса Product или его наследников")
+        if not issubclass(type(product), Product):
+            raise TypeError("Можно добавлять только объекты класса Product или его наследников")
         self.__products.append(product)
 
     @property
