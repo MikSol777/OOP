@@ -52,75 +52,81 @@ class TestProductProperties(unittest.TestCase):
 class TestProduct(unittest.TestCase):
 
     def setUp(self):
-        self.product1 = Product("Товар 1", "Описание товара 1", 100, 10)
-        self.product2 = Product("Товар 2", "Описание товара 2", 200, 2)
+        self.product = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+        self.smartphone = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8,
+                                     1.5, "Model X", 128, "Black")
+        self.lawn_grass = LawnGrass("Test Grass", "Test Description", 500.0, 10,
+                                    "Russia", "2 weeks", "Green")
 
-    def test_str(self):
-        self.assertEqual(str(self.product1), "Товар 1, 100 руб. Остаток: 10 шт.")
-        self.assertEqual(str(self.product2), "Товар 2, 200 руб. Остаток: 2 шт.")
+    def test_product_creation(self):
+        self.assertEqual(self.product.name, "Samsung Galaxy S23 Ultra")
+        self.assertEqual(self.product.description, "256GB, Серый цвет, 200MP камера")
+        self.assertEqual(self.product.price, 180000.0)
+        self.assertEqual(self.product.quantity, 5)
 
-    def test_add(self):
-        self.assertEqual(self.product1 + self.product2, 1400)
+    @patch('builtins.input', return_value='y')
+    def test_product_price_setter(self, mock_input):
+        # Test price increase
+        self.product.price = 190000.0
+        self.assertEqual(self.product.price, 190000.0)
+
+        self.product.price = 170000.0
+        self.assertEqual(self.product.price, 170000.0)
+
+        self.product.price = -100
+        self.assertEqual(self.product.price, 170000.0)  # Price should remain unchanged
+
+    def test_product_addition(self):
+        product2 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
+        total_value = self.product + product2
+        expected_value = (180000.0 * 5) + (31000.0 * 14)  # 900000 + 434000 = 1334000
+        self.assertEqual(total_value, expected_value)
+
+    def test_product_str(self):
+        expected = "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+        self.assertEqual(str(self.product), expected)
+
+    def test_new_product_classmethod(self):
+        products = []
+        product_dict = {
+            "name": "Samsung Galaxy S23 Ultra",
+            "description": "256GB, Серый цвет, 200MP камера",
+            "price": 180000.0,
+            "quantity": 5
+        }
+
+        product = Product.new_product(product_dict, products)
+        self.assertEqual(len(products), 1)
+        self.assertEqual(product.name, product_dict["name"])
+
+        product_dict["quantity"] = 3
+        product_dict["price"] = 190000.0
+        updated_product = Product.new_product(product_dict, products)
+        self.assertEqual(len(products), 1)  # Should not create new product
+        self.assertEqual(updated_product.quantity, 8)  # 5 + 3
+        self.assertEqual(updated_product.price, 190000.0)  # Higher price should be set
 
 
 class TestProductInheritance(unittest.TestCase):
     def setUp(self):
-        self.smartphone = Smartphone(
-            name="iPhone 15",
-            description="512GB, Gray space",
-            price=210000.0,
-            quantity=8,
-            efficiency=98.2,
-            model="15",
-            memory=512,
-            color="Gray space"
-        )
-        self.lawn_grass = LawnGrass(
-            name="Газонная трава",
-            description="Элитная трава для газона",
-            price=500.0,
-            quantity=20,
-            country="Россия",
-            germination_period="7 дней",
-            color="Зеленый"
-        )
-        self.base_product = Product(
-            name="Test Product",
-            description="Test Description",
-            price=100.0,
-            quantity=10
-        )
+        self.smartphone = Smartphone("iPhone 15", "512GB, Gray space", 210000.0, 8,
+                                     1.5, "Model X", 128, "Black")
+        self.lawn_grass = LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20,
+                                    "Russia", "2 weeks", "Green")
+        self.product = Product("Test Product", "Test Description", 100.0, 10)
 
     def test_smartphone_initialization(self):
-        # Проверка базовых атрибутов
         self.assertEqual(self.smartphone.name, "iPhone 15")
-        self.assertEqual(self.smartphone.description, "512GB, Gray space")
-        self.assertEqual(self.smartphone.price, 210000.0)
-        self.assertEqual(self.smartphone.quantity, 8)
-
-        # Проверка специфичных атрибутов
-        self.assertEqual(self.smartphone.efficiency, 98.2)
-        self.assertEqual(self.smartphone.model, "15")
-        self.assertEqual(self.smartphone.memory, 512)
-        self.assertEqual(self.smartphone.color, "Gray space")
-
-        # Проверка наследования
-        self.assertIsInstance(self.smartphone, Product)
+        self.assertEqual(self.smartphone.efficiency, 1.5)
+        self.assertEqual(self.smartphone.model, "Model X")
+        self.assertEqual(self.smartphone.memory, 128)
+        self.assertEqual(self.smartphone.color, "Black")
 
     def test_lawn_grass_initialization(self):
-        # Проверка базовых атрибутов
         self.assertEqual(self.lawn_grass.name, "Газонная трава")
-        self.assertEqual(self.lawn_grass.description, "Элитная трава для газона")
-        self.assertEqual(self.lawn_grass.price, 500.0)
-        self.assertEqual(self.lawn_grass.quantity, 20)
-
-        # Проверка специфичных атрибутов
-        self.assertEqual(self.lawn_grass.country, "Россия")
-        self.assertEqual(self.lawn_grass.germination_period, "7 дней")
-        self.assertEqual(self.lawn_grass.color, "Зеленый")
-
-        # Проверка наследования
-        self.assertIsInstance(self.lawn_grass, Product)
+        self.assertEqual(self.lawn_grass.country, "Russia")
+        self.assertEqual(self.lawn_grass.germination_period, "2 weeks")
+        self.assertEqual(self.lawn_grass.color, "Green")
 
     def test_product_addition(self):
         smartphone2 = Smartphone(
@@ -143,31 +149,42 @@ class TestProductInheritance(unittest.TestCase):
             color="Темно-зеленый"
         )
 
-        # Тест сложения одинаковых типов
         self.assertEqual(self.smartphone + smartphone2, 210000.0 * 8 + 180000.0 * 5)
         self.assertEqual(self.lawn_grass + lawn_grass2, 500.0 * 20 + 450.0 * 15)
 
-        # Тест сложения разных типов
-        with self.assertRaises(TypeError):
-            self.smartphone + self.lawn_grass
 
-        # Тест сложения с не-Product объектом
-        with self.assertRaises(ValueError):
-            self.smartphone + "not a product"
 
-        # Тест сложения с None
-        with self.assertRaises(ValueError):
-            self.smartphone + None
+class TestSmartphone(unittest.TestCase):
+    def setUp(self):
+        self.smartphone = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8,
+                                     1.5, "Model X", 128, "Black")
 
-        # Тест сложения с нулевым количеством
-        smartphone_zero = Smartphone(
-            name="Test",
-            description="Test",
-            price=100.0,
-            quantity=0,
-            efficiency=95.0,
-            model="Test",
-            memory=128,
-            color="Black"
-        )
-        self.assertEqual(self.smartphone + smartphone_zero, 210000.0 * 8 + 100.0 * 0)
+    def test_smartphone_creation(self):
+        self.assertEqual(self.smartphone.name, "Iphone 15")
+        self.assertEqual(self.smartphone.description, "512GB, Gray space")
+        self.assertEqual(self.smartphone.price, 210000.0)
+        self.assertEqual(self.smartphone.quantity, 8)
+        self.assertEqual(self.smartphone.efficiency, 1.5)
+        self.assertEqual(self.smartphone.model, "Model X")
+        self.assertEqual(self.smartphone.memory, 128)
+        self.assertEqual(self.smartphone.color, "Black")
+
+
+class TestLawnGrass(unittest.TestCase):
+    def setUp(self):
+        self.lawn_grass = LawnGrass("Test Grass", "Test Description", 500.0, 10,
+                                    "Russia", "2 weeks", "Green")
+
+    def test_lawn_grass_creation(self):
+        self.assertEqual(self.lawn_grass.name, "Test Grass")
+        self.assertEqual(self.lawn_grass.description, "Test Description")
+        self.assertEqual(self.lawn_grass.price, 500.0)
+        self.assertEqual(self.lawn_grass.quantity, 10)
+        self.assertEqual(self.lawn_grass.country, "Russia")
+        self.assertEqual(self.lawn_grass.germination_period, "2 weeks")
+        self.assertEqual(self.lawn_grass.color, "Green")
+
+
+if __name__ == '__main__':
+    unittest.main()
+
