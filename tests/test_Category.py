@@ -7,8 +7,8 @@ from src.Product import Product
 def test_category_initialization(category):
     assert category.name == "Смартфоны"
     assert (
-            category.description
-            == "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни"
+        category.description
+        == "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни"
     )
     assert len(category.products) == 2
 
@@ -62,20 +62,22 @@ class TestCategory(unittest.TestCase):
         self.category = Category(
             "Смартфоны",
             "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
-            [self.product1, self.product2, self.product3]
+            [self.product1, self.product2, self.product3],
         )
 
     def test_category_creation(self):
         self.assertEqual(self.category.name, "Смартфоны")
-        self.assertEqual(self.category.description,
-                         "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни")
+        self.assertEqual(
+            self.category.description,
+            "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
+        )
         self.assertEqual(len(self.category.products), 3)
         self.assertEqual(self.category.products_count, 3)
         self.assertEqual(Category.category_count, 1)
         self.assertEqual(Category.products_count, 3)
 
     def test_category_add_product(self):
-        new_product = Product("55\" QLED 4K", "Фоновая подсветка", 123000.0, 7)
+        new_product = Product('55" QLED 4K', "Фоновая подсветка", 123000.0, 7)
         self.category.add_product(new_product)
         self.assertEqual(len(self.category.products), 4)
         self.assertEqual(self.category.products_count, 3)
@@ -94,11 +96,11 @@ class TestCategory(unittest.TestCase):
         self.assertEqual(str(self.category), expected)
 
     def test_multiple_categories(self):
-        product4 = Product("55\" QLED 4K", "Фоновая подсветка", 123000.0, 7)
+        product4 = Product('55" QLED 4K', "Фоновая подсветка", 123000.0, 7)
         category2 = Category(
             "Телевизоры",
             "Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
-            [product4]
+            [product4],
         )
 
         self.assertEqual(Category.category_count, 2)
@@ -112,6 +114,5 @@ class TestCategory(unittest.TestCase):
         self.assertEqual(products[2].name, "Xiaomi Redmi Note 11")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-

@@ -53,10 +53,8 @@ class TestProduct(unittest.TestCase):
 
     def setUp(self):
         self.product = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
-        self.smartphone = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8,
-                                     1.5, "Model X", 128, "Black")
-        self.lawn_grass = LawnGrass("Test Grass", "Test Description", 500.0, 10,
-                                    "Russia", "2 weeks", "Green")
+        self.smartphone = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 1.5, "Model X", 128, "Black")
+        self.lawn_grass = LawnGrass("Test Grass", "Test Description", 500.0, 10, "Russia", "2 weeks", "Green")
 
     def test_product_creation(self):
         self.assertEqual(self.product.name, "Samsung Galaxy S23 Ultra")
@@ -64,7 +62,7 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(self.product.price, 180000.0)
         self.assertEqual(self.product.quantity, 5)
 
-    @patch('builtins.input', return_value='y')
+    @patch("builtins.input", return_value="y")
     def test_product_price_setter(self, mock_input):
         # Test price increase
         self.product.price = 190000.0
@@ -92,7 +90,7 @@ class TestProduct(unittest.TestCase):
             "name": "Samsung Galaxy S23 Ultra",
             "description": "256GB, Серый цвет, 200MP камера",
             "price": 180000.0,
-            "quantity": 5
+            "quantity": 5,
         }
 
         product = Product.new_product(product_dict, products)
@@ -109,10 +107,10 @@ class TestProduct(unittest.TestCase):
 
 class TestProductInheritance(unittest.TestCase):
     def setUp(self):
-        self.smartphone = Smartphone("iPhone 15", "512GB, Gray space", 210000.0, 8,
-                                     1.5, "Model X", 128, "Black")
-        self.lawn_grass = LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20,
-                                    "Russia", "2 weeks", "Green")
+        self.smartphone = Smartphone("iPhone 15", "512GB, Gray space", 210000.0, 8, 1.5, "Model X", 128, "Black")
+        self.lawn_grass = LawnGrass(
+            "Газонная трава", "Элитная трава для газона", 500.0, 20, "Russia", "2 weeks", "Green"
+        )
         self.product = Product("Test Product", "Test Description", 100.0, 10)
 
     def test_smartphone_initialization(self):
@@ -137,7 +135,7 @@ class TestProductInheritance(unittest.TestCase):
             efficiency=95.5,
             model="S23",
             memory=256,
-            color="Blue"
+            color="Blue",
         )
         lawn_grass2 = LawnGrass(
             name="Газонная трава 2",
@@ -146,18 +144,16 @@ class TestProductInheritance(unittest.TestCase):
             quantity=15,
             country="США",
             germination_period="5 дней",
-            color="Темно-зеленый"
+            color="Темно-зеленый",
         )
 
         self.assertEqual(self.smartphone + smartphone2, 210000.0 * 8 + 180000.0 * 5)
         self.assertEqual(self.lawn_grass + lawn_grass2, 500.0 * 20 + 450.0 * 15)
 
 
-
 class TestSmartphone(unittest.TestCase):
     def setUp(self):
-        self.smartphone = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8,
-                                     1.5, "Model X", 128, "Black")
+        self.smartphone = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 1.5, "Model X", 128, "Black")
 
     def test_smartphone_creation(self):
         self.assertEqual(self.smartphone.name, "Iphone 15")
@@ -172,8 +168,7 @@ class TestSmartphone(unittest.TestCase):
 
 class TestLawnGrass(unittest.TestCase):
     def setUp(self):
-        self.lawn_grass = LawnGrass("Test Grass", "Test Description", 500.0, 10,
-                                    "Russia", "2 weeks", "Green")
+        self.lawn_grass = LawnGrass("Test Grass", "Test Description", 500.0, 10, "Russia", "2 weeks", "Green")
 
     def test_lawn_grass_creation(self):
         self.assertEqual(self.lawn_grass.name, "Test Grass")
@@ -185,6 +180,5 @@ class TestLawnGrass(unittest.TestCase):
         self.assertEqual(self.lawn_grass.color, "Green")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-

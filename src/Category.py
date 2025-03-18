@@ -1,5 +1,6 @@
 from src.Product import Product
 
+
 class Category:
     category_count = 0
     products_count = 0
