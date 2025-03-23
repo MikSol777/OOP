@@ -113,6 +113,19 @@ class TestCategory(unittest.TestCase):
         self.assertEqual(products[1].name, "Iphone 15")
         self.assertEqual(products[2].name, "Xiaomi Redmi Note 11")
 
+    def test_middle_price_with_products(self):
+        # Average of 180000.0, 210000.0, and 31000.0
+        expected_average = (180000.0 + 210000.0 + 31000.0) / 3
+        self.assertEqual(self.category.middle_price(), expected_average)
+
+    def test_middle_price_empty_category(self):
+        empty_category = Category("Пустая категория", "Категория без продуктов", [])
+        self.assertEqual(empty_category.middle_price(), 0)
+
+    def test_middle_price_single_product(self):
+        single_product_category = Category("Один продукт", "Категория с одним продуктом", [self.product1])
+        self.assertEqual(single_product_category.middle_price(), self.product1.price)
+
 
 if __name__ == "__main__":
     unittest.main()

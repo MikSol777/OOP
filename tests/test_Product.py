@@ -104,6 +104,15 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(updated_product.quantity, 8)  # 5 + 3
         self.assertEqual(updated_product.price, 190000.0)  # Higher price should be set
 
+        def test_product_creation_with_zero_quantity(self):
+            with self.assertRaises(ValueError) as context:
+                Product("Test Product", "Description", 1000.0, 0)
+            self.assertEqual(str(context.exception), "Товар с нулевым количеством не может быть добавлен")
+
+        def test_product_creation_with_valid_quantity(self):
+            product = Product("Test Product", "Description", 1000.0, 1)
+            self.assertEqual(product.quantity, 1)
+
 
 class TestProductInheritance(unittest.TestCase):
     def setUp(self):
