@@ -7,6 +7,10 @@
 ## Реализованные классы.
 1. **`Product`**
 2. **`Category`**
+3. **`Smartphone`**
+4. **`LawnGrass`**
+5. **`LoggerMixin`**
+6. **`BaseProduct`**
 
 ## Тесты проекта
-Добавлено тестирование через pytest
+Добавлено тестирование через pytest.
